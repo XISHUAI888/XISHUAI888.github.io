@@ -9,23 +9,24 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
-            --primary: #003366; /* 深蓝 */
-            --primary-light: #004080;
-            --accent: #B22222; /* 龙华红/朱红 */
-            --accent-light: #CD5C5C;
-            --bg-primary: #F4F7F9;
+            --primary: #003366; /* 严谨深蓝 */
+            --primary-light: #004d99;
+            --accent: #B22222; /* 龙华红 */
+            --accent-light: #d32f2f;
+            --bg-primary: #f5f7fa;
             --bg-card: #ffffff;
-            --text-primary: #2C3E50;
-            --text-secondary: #546E7A;
-            --border: #CFD8DC;
+            --text-primary: #1a2a3a;
+            --text-secondary: #5a6a7a;
+            --border: #e1e8ed;
             --shadow: rgba(0, 51, 102, 0.1);
         }
 
         .dark {
-            --bg-primary: #101923;
-            --bg-card: #1B2633;
-            --text-primary: #E0E6ED;
-            --border: #2D3D4F;
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,109 +34,101 @@
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            padding: 1.2rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #001a33 100%);
+            padding: 1rem 2rem;
             color: white;
-            box-shadow: 0 4px 15px var(--shadow);
-            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 4px 12px var(--shadow);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 3px solid var(--accent);
         }
         .header-content {
             max-width: 1200px; margin: 0 auto;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .logo-box { display: flex; align-items: center; gap: 1rem; }
-        .logo-box i { font-size: 2.2rem; }
-        .logo-box h1 { font-size: 1.4rem; font-weight: 700; }
-        .dept-tag { background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.4); }
+        .logo-group { display: flex; align-items: center; gap: 1rem; }
+        .logo-group i { font-size: 2.2rem; color: #fff; }
+        .logo-group h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; }
+        .dept-label { font-size: 0.8rem; background: var(--accent); padding: 2px 8px; border-radius: 4px; margin-top: 4px; display: inline-block; }
 
-        /* Container & Cards */
-        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: var(--bg-card); border-radius: 12px; box-shadow: 0 6px 18px var(--shadow); margin-bottom: 1.5rem; border: 1px solid var(--border); overflow: hidden; }
-        .card-header { background: rgba(0, 51, 102, 0.03); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; color: var(--primary); }
-        .card-header i { font-size: 1.2rem; }
+        /* Container */
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: var(--bg-card); border-radius: 12px; box-shadow: 0 4px 20px var(--shadow); margin-bottom: 1.5rem; border: 1px solid var(--border); overflow: hidden; }
+        .card-header { background: rgba(0, 51, 102, 0.02); padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; color: var(--primary); }
+        .card-header h2 { font-size: 1.1rem; font-weight: 700; }
         .card-body { padding: 1.5rem; }
 
-        /* Forms */
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
+        /* Grid System */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
         .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-        label { font-weight: 600; font-size: 0.9rem; color: var(--text-secondary); }
-        input, select, textarea { 
-            padding: 0.75rem; border: 1.5px solid var(--border); border-radius: 8px; 
-            background: var(--bg-card); color: var(--text-primary); font-size: 0.95rem;
+        .full-width { grid-column: 1 / -1; }
+        label { font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+        label i { color: var(--accent); font-size: 0.85rem; }
+
+        /* Inputs */
+        input, select, textarea {
+            padding: 0.8rem; border: 1.5px solid var(--border); border-radius: 8px;
+            background: var(--bg-card); color: var(--text-primary); font-size: 0.95rem; transition: all 0.3s;
         }
-        input:focus { border-color: var(--accent); outline: none; }
-        
-        /* Specialized Checkboxes */
-        .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.8rem; margin-top: 0.5rem; }
-        .check-item { 
-            padding: 0.8rem; border: 1.5px solid var(--border); border-radius: 8px; 
-            cursor: pointer; display: flex; align-items: center; gap: 0.8rem; transition: 0.2s;
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1); }
+
+        /* Custom Checkbox Grid */
+        .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
+        .check-item {
+            padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 8px;
+            cursor: pointer; display: flex; align-items: center; gap: 0.8rem; transition: 0.2s; background: var(--bg-card);
         }
-        .check-item.active { border-color: var(--accent); background: rgba(178, 34, 34, 0.05); color: var(--accent); }
+        .check-item:hover { border-color: var(--accent-light); }
+        .check-item.active { border-color: var(--accent); background: rgba(178, 34, 34, 0.05); }
         .check-item input { display: none; }
+        .check-item .box { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; position: relative; }
+        .check-item.active .box { background: var(--accent); border-color: var(--accent); }
+        .check-item.active .box::after { content: '✓'; color: white; position: absolute; top: -2px; left: 2px; font-size: 12px; }
 
         /* Buttons */
-        .btn-group { display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; }
-        .btn { padding: 1rem 2.5rem; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.5rem; }
-        .btn-primary { background: var(--accent); color: white; }
+        .btn-row { display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; }
+        .btn { padding: 0.9rem 2.5rem; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.6rem; font-size: 1rem; }
+        .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 12px rgba(178, 34, 34, 0.3); }
         .btn-primary:hover { background: #8B0000; transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-secondary { background: var(--primary); color: white; }
 
-        /* Analysis Result */
-        #resultBox { display: none; animation: slideUp 0.5s ease; }
-        .analysis-content { padding: 2rem; line-height: 1.8; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* API Overlay */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal.visible { display: flex; }
+        .modal-content { background: var(--bg-card); width: 90%; max-width: 500px; padding: 2rem; border-radius: 16px; position: relative; }
 
-        /* Modals & Loading */
-        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .overlay.visible { display: flex; }
-        .loader { text-align: center; color: white; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #fff; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s infinite linear; margin: 0 auto 1rem; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Result Section */
+        #resultContainer { display: none; margin-top: 2rem; }
+        .result-content { padding: 2rem; font-size: 1.05rem; border-left: 4px solid var(--accent); }
+        .streaming::after { content: '▋'; animation: blink 1s infinite; color: var(--accent); }
+        @keyframes blink { 50% { opacity: 0; } }
 
-        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        /* Loading Overlay */
+        .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 3000; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        .loading-overlay.visible { display: flex; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="header-content">
-            <div class="logo-box">
-                <i class="fas fa-bone"></i>
+            <div class="logo-group">
+                <i class="fas fa-microscope"></i>
                 <div>
                     <h1>CSM 手术时机及预后预测系统</h1>
-                    <div class="dept-tag">上海中医药大学附属龙华医院 · 骨伤科</div>
+                    <span class="dept-label">龙华骨伤科 · 精准诊疗</span>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="btn-icon" onclick="toggleSettings()" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </div>
+            <button onclick="openSettings()" style="background:none; border:none; color:white; cursor:pointer; font-size:1.4rem;">
+                <i class="fas fa-cog"></i>
+            </button>
         </div>
     </header>
 
     <main class="container">
-        <div id="apiConfig" class="card" style="display:none; border: 2px solid var(--accent);">
-            <div class="card-header"><i class="fas fa-key"></i> <h2>系统配置 (Poe/OpenAI)</h2></div>
-            <div class="card-body form-grid">
-                <div class="form-group">
-                    <label>API Key</label>
-                    <input type="password" id="apiKey" placeholder="输入您的 API Key">
-                </div>
-                <div class="form-group">
-                    <label>模型名称</label>
-                    <input type="text" id="modelName" value="Claude-3.5-Sonnet">
-                </div>
-                <div class="form-group">
-                    <label>Endpoint</label>
-                    <input type="text" id="apiEndpoint" value="https://api.poe.com/v1/chat/completions">
-                </div>
-            </div>
-        </div>
-
         <div class="card">
-            <div class="card-header"><i class="fas fa-user-injured"></i> <h2>患者基本信息</h2></div>
+            <div class="card-header"><i class="fas fa-id-card"></i> <h2>患者基本信息</h2></div>
             <div class="card-body form-grid">
                 <div class="form-group"><label>年龄</label><input type="number" id="age"></div>
                 <div class="form-group">
@@ -148,73 +141,81 @@
         </div>
 
         <div class="card">
-            <div class="card-header"><i class="fas fa-file-medical"></i> <h2>病史与症状描述</h2></div>
+            <div class="card-header"><i class="fas fa-notes-medical"></i> <h2>主诉症状及病程</h2></div>
             <div class="card-body">
-                <div class="form-grid" style="margin-bottom: 1.5rem;">
-                    <div class="form-group"><label>症状持续时间</label><input type="text" id="duration" placeholder="如：6个月"></div>
+                <div class="form-grid">
+                    <div class="form-group full-width"><label>症状描述</label><textarea id="symptomDesc" rows="2" placeholder="详细描述主诉情况..."></textarea></div>
+                    <div class="form-group"><label>症状持续时间</label><input type="text" id="duration" placeholder="如：3个月"></div>
                     <div class="form-group"><label>疼痛 VAS (0-10)</label><input type="number" id="vas" min="0" max="10"></div>
                     <div class="form-group">
                         <label>肢体麻木程度</label>
                         <select id="numbness">
                             <option value="偶尔轻微">偶尔轻微</option>
                             <option value="经常但不严重">经常但不严重</option>
-                            <option value="经常且严重">经常且严重</option>
+                            <option value="经常但严重">经常但严重</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group"><label>主诉详述</label><textarea id="complaintDesc" rows="2"></textarea></div>
-                
-                <label style="display:block; margin-top:1.2rem;">功能障碍（可多选）</label>
+
+                <label style="display:block; margin: 1.5rem 0 0.8rem;">功能障碍（可多选）</label>
                 <div class="check-grid" id="dysfunctionGrid">
-                    <label class="check-item"><input type="checkbox" name="df" value="写字扣纽扣不灵活"><span>写字、持筷、扣纽扣不灵活</span></label>
-                    <label class="check-item"><input type="checkbox" name="df" value="束带感或四肢异感"><span>躯干/四肢麻木、烧灼或束带感</span></label>
-                    <label class="check-item"><input type="checkbox" name="df" value="行走不稳踏棉感"><span>行走不稳、易跌倒、踏棉感</span></label>
-                    <label class="check-item"><input type="checkbox" name="df" value="括约肌功能障碍"><span>膀胱直肠功能障碍/性功能减退</span></label>
-                    <label class="check-item"><input type="checkbox" name="df" value="部分肢体瘫痪"><span>部分肢体瘫痪</span></label>
+                    <div class="check-item" data-val="写字持筷不灵活"><div class="box"></div><span>写字、持筷、扣纽扣等不灵活</span></div>
+                    <div class="check-item" data-val="异感或束带感"><div class="box"></div><span>躯干/四肢麻木、烧灼、蚁行或束带感</span></div>
+                    <div class="check-item" data-val="踏棉感"><div class="box"></div><span>行走不稳、易跌倒、踏棉感</span></div>
+                    <div class="check-item" data-val="括约肌功能障碍"><div class="box"></div><span>膀胱直肠功能障碍或性功能减退</span></div>
+                    <div class="check-item" data-val="部分肢体瘫痪"><div class="box"></div><span>部分肢体瘫痪</span></div>
                 </div>
 
-                <label style="display:block; margin-top:1.2rem;">既往史</label>
-                <div class="check-grid">
-                    <label class="check-item"><input type="checkbox" name="pmh" value="糖尿病"><span>糖尿病</span></label>
-                    <label class="check-item"><input type="checkbox" name="pmh" value="吸烟"><span>长期吸烟</span></label>
-                    <label class="check-item"><input type="checkbox" name="pmh" value="骨质疏松"><span>骨质疏松</span></label>
-                    <label class="check-item"><input type="checkbox" name="pmh" value="既往颈椎手术"><span>既往颈椎手术史</span></label>
+                <label style="display:block; margin: 1.5rem 0 0.8rem;">既往史</label>
+                <div class="check-grid" id="pmhGrid">
+                    <div class="check-item" data-val="糖尿病"><div class="box"></div><span>糖尿病</span></div>
+                    <div class="check-item" data-val="吸烟"><div class="box"></div><span>吸烟史</span></div>
+                    <div class="check-item" data-val="骨质疏松"><div class="box"></div><span>骨质疏松</span></div>
+                    <div class="check-item" data-val="既往颈椎手术"><div class="box"></div><span>既往颈椎手术病史</span></div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header"><i class="fas fa-stethoscope"></i> <h2>体格检查</h2></div>
+            <div class="card-header"><i class="fas fa-stethoscope"></i> <h2>体格检查 (PE)</h2></div>
             <div class="card-body">
-                <div class="check-grid">
-                    <label class="check-item"><input type="checkbox" name="pe" value="宽基步态"><span>宽基步态 (双足间距>肩宽)</span></label>
-                    <label class="check-item"><input type="checkbox" name="pe" value="小指逃避征"><span>小指逃避征 (Finger Escape)</span></label>
-                    <label class="check-item"><input type="checkbox" name="pe" value="Hoffmann征阳性"><span>Hoffmann 征 (+)</span></label>
-                    <label class="check-item"><input type="checkbox" name="pe" value="Babinski征阳性"><span>Babinski 征 (+)</span></label>
-                    <label class="check-item"><input type="checkbox" name="pe" value="阵挛阳性"><span>髌阵挛或踝阵挛 (+)</span></label>
+                <div class="check-grid" id="peGrid">
+                    <div class="check-item" data-val="宽基步态"><div class="box"></div><span>宽基步态 (双足间距>肩宽)</span></div>
+                    <div class="check-item" data-val="小指逃避征"><div class="box"></div><span>小指逃避征 (无法并拢)</span></div>
+                    <div class="check-item" data-val="Hoffmann征(+)"><div class="box"></div><span>Hoffmann 征 (+)</span></div>
+                    <div class="check-item" data-val="Babinski征(+)"><div class="box"></div><span>Babinski 征 (+)</span></div>
+                    <div class="check-item" data-val="阵挛阳性"><div class="box"></div><span>髌阵挛或踝阵挛 (+)</span></div>
                 </div>
-                <div class="form-grid" style="margin-top:1.2rem;">
+                <div class="form-grid" style="margin-top: 1.5rem;">
                     <div class="form-group"><label>患手握力 (kg)</label><input type="number" id="gripStrength"></div>
-                    <div class="form-group"><label>10秒握手-伸指次数</label><input type="number" id="tenSecTest" placeholder="正常>20次"></div>
+                    <div class="form-group"><label>10秒握手-伸指试验 (次)</label><input type="number" id="tenSecTest" placeholder="正常>20次"></div>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-header"><i class="fas fa-x-ray"></i> <h2>影像学与量表评估</h2></div>
+            <div class="card-header"><i class="fas fa-radiation"></i> <h2>影像学与辅助检查</h2></div>
             <div class="card-body">
                 <div class="form-grid">
                     <div class="form-group">
                         <label>颈椎生理曲度</label>
                         <select id="curvature">
-                            <option value="正常">正常</option>
-                            <option value="变直">变直</option>
-                            <option value="后凸">后凸</option>
+                            <option value="曲度正常">曲度正常</option>
+                            <option value="曲度变直">曲度变直</option>
+                            <option value="曲度后凸">曲度后凸</option>
                         </select>
                     </div>
                     <div class="form-group"><label>Pavlov 比值</label><input type="number" id="pavlov" step="0.01"></div>
                     <div class="form-group">
-                        <label>脊髓 T2 信号</label>
+                        <label>过伸过屈位不稳</label>
+                        <select id="stability"><option value="否">否</option><option value="是">是</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>钙化情况</label>
+                        <select id="calcification"><option value="无">无</option><option value="纤维环钙化">纤维环钙化</option><option value="黄韧带钙化">黄韧带钙化</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>MRI T2 信号</label>
                         <select id="t2Signal">
                             <option value="无高信号">无高信号</option>
                             <option value="轻度、模糊高信号">轻度、模糊高信号</option>
@@ -222,173 +223,204 @@
                             <option value="多节段、强高信号">多节段、强高信号</option>
                         </select>
                     </div>
+                    <div class="form-group"><label>压迫节段数</label><input type="number" id="segments"></div>
                     <div class="form-group">
                         <label>脊髓扁平率 (CR)</label>
                         <select id="crRatio">
-                            <option value=">0.5">&gt;0.5 (轻度)</option>
-                            <option value="0.3-0.5">0.3 – 0.5 (中度)</option>
-                            <option value="<0.3">&lt;0.3 (重度)</option>
+                            <option value=">0.5">&gt;0.5</option>
+                            <option value="0.3–0.5">0.3 – 0.5</option>
+                            <option value="<0.3">&lt;0.3</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="form-grid" style="margin-top:1.2rem;">
-                    <div class="form-group">
-                        <label>术前 JOA 评分</label>
-                        <input type="number" id="joaScore" placeholder="0-17">
-                    </div>
-                    <div class="form-group">
-                        <label>Nurick 分级</label>
-                        <select id="nurick">
-                            <option value="0级">0级 (仅症状)</option>
-                            <option value="1级">1级 (步态轻微受影响)</option>
-                            <option value="2级">2级 (步态明显受影响)</option>
-                            <option value="3级">3级 (需辅助行走)</option>
-                            <option value="4级">4级 (需轮椅/卧床)</option>
-                            <option value="5级">5级 (全瘫)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>手术方式 (拟定)</label>
-                        <select id="surgeryType">
-                            <option value="无">无</option>
-                            <option value="ACDF">ACDF (前路路间融合)</option>
-                            <option value="ACCF">ACCF (前路椎体次全切)</option>
-                            <option value="ADR">ADR (人工椎间盘置换)</option>
-                            <option value="椎管扩大椎板成形术">椎管扩大椎板成形术 (后路单开门)</option>
-                            <option value="椎板切除+内固定">椎板切除 + 侧块螺钉固定</option>
-                        </select>
-                    </div>
+                    <div class="form-group"><label>肌电图描述</label><input type="text" id="emg" placeholder="如：神经源性受损"></div>
                 </div>
             </div>
         </div>
 
-        <div class="btn-group">
-            <button class="btn btn-outline" onclick="resetForm()"><i class="fas fa-undo"></i> 重置</button>
-            <button class="btn btn-primary" onclick="startAnalysis()"><i class="fas fa-chart-line"></i> 生成预测报告</button>
+        <div class="card">
+            <div class="card-header"><i class="fas fa-chart-bar"></i> <h2>临床量表评估</h2></div>
+            <div class="card-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>术前 JOA 评分</label>
+                        <input type="number" id="joa" placeholder="0-17">
+                        <small style="color:var(--text-secondary)">轻:15-17; 中:12-14; 重:<11</small>
+                    </div>
+                    <div class="form-group">
+                        <label>术前 Nurick 分级</label>
+                        <select id="nurick">
+                            <option value="0级">0级 (无步态异常)</option>
+                            <option value="1级">1级 (步态异常，不影响工作)</option>
+                            <option value="2级">2级 (步态受损，尚能全职工作)</option>
+                            <option value="3级">3级 (步态受损严重，需扶手)</option>
+                            <option value="4级">4级 (需辅助器/轮椅)</option>
+                            <option value="5级">5级 (卧床/全瘫)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>短期 MJOA 变化</label>
+                        <select id="mjoaDrop">
+                            <option value="无明显下降">无明显下降</option>
+                            <option value="降低超过2分">降低超过2分 (进展期)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>PROMs 其他参考</label><input type="text" id="proms"></div>
+                </div>
+            </div>
         </div>
 
-        <div id="resultBox" class="card" style="border-top: 5px solid var(--accent);">
-            <div class="card-header"><i class="fas fa-robot"></i> <h2>龙华骨伤科 - 临床决策建议</h2></div>
-            <div id="analysisTarget" class="analysis-content"></div>
+        <div class="card">
+            <div class="card-header"><i class="fas fa-hospital-user"></i> <h2>手术方案相关</h2></div>
+            <div class="card-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>拟手术术式</label>
+                        <select id="surgeryType">
+                            <option value="无">无</option>
+                            <option value="ACDF">ACDF</option>
+                            <option value="ACCF">ACCF</option>
+                            <option value="ADR">ADR</option>
+                            <option value="椎管扩大椎板成形术">椎管扩大椎板成形术</option>
+                            <option value="椎板切除+侧块螺钉">椎板切除 + 侧块螺钉固定</option>
+                            <option value="前后入路联合手术">前后入路联合手术</option>
+                            <option value="微创手术">微创手术</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>拟减压节段数</label><input type="number" id="targetSegments"></div>
+                    <div class="form-group">
+                        <label>减压及稳定策略</label>
+                        <select id="strategy">
+                            <option value="单纯减压">单纯减压</option>
+                            <option value="矫正畸形+稳定">同时矫正畸形、稳定节段</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:1rem;"><label>病史补充</label><textarea id="medicalHistory" rows="2"></textarea></div>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-secondary" onclick="resetForm()"><i class="fas fa-undo"></i> 重置数据</button>
+            <button class="btn btn-primary" onclick="performAssessment()"><i class="fas fa-magic"></i> 开始预测分析</button>
+        </div>
+
+        <div id="resultContainer" class="card">
+            <div class="card-header"><i class="fas fa-file-medical-alt"></i> <h2>预测分析报告 (由龙华骨伤科 AI 生成)</h2></div>
+            <div id="analysisTarget" class="result-content"></div>
         </div>
     </main>
 
-    <div class="overlay" id="loadingOverlay">
-        <div class="loader">
-            <div class="spinner"></div>
-            <p>正在结合龙华骨伤科临床经验进行深度预测...</p>
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h3 style="margin-bottom:1rem">API 设置</h3>
+            <div class="form-group" style="margin-bottom:1rem">
+                <label>API Key</label>
+                <input type="password" id="apiKey" placeholder="poe_xxx 或 sk_xxx">
+            </div>
+            <div class="form-group" style="margin-bottom:1rem">
+                <label>API Endpoint</label>
+                <input type="text" id="apiEndpoint" value="https://api.poe.com/v1/chat/completions">
+            </div>
+            <div class="form-group" style="margin-bottom:1.5rem">
+                <label>模型名称</label>
+                <input type="text" id="modelName" value="Claude-3.5-Sonnet">
+            </div>
+            <button class="btn btn-primary" style="width:100%" onclick="closeSettings()">保存并关闭</button>
         </div>
     </div>
 
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>正在结合龙华医院临床指南进行分析中...</p>
+    </div>
+
     <script>
-        // Checkbox Visual Logic
+        // Checkbox interaction
         document.querySelectorAll('.check-item').forEach(item => {
-            const cb = item.querySelector('input');
-            item.onclick = () => {
-                cb.checked = !cb.checked;
-                item.classList.toggle('active', cb.checked);
+            item.onclick = function() {
+                this.classList.toggle('active');
             };
         });
 
-        function toggleSettings() {
-            const config = document.getElementById('apiConfig');
-            config.style.display = config.style.display === 'none' ? 'block' : 'none';
+        function openSettings() { document.getElementById('settingsModal').classList.add('visible'); }
+        function closeSettings() { document.getElementById('settingsModal').classList.remove('visible'); }
+        function resetForm() { window.location.reload(); }
+
+        function getActiveChecks(containerId) {
+            return Array.from(document.querySelectorAll(`#${containerId} .check-item.active`)).map(el => el.getAttribute('data-val'));
         }
 
-        function resetForm() {
-            window.location.reload();
-        }
-
-        async function startAnalysis() {
-            const apiKey = document.getElementById('apiKey').value;
-            if(!apiKey) { alert("请先在顶部设置中输入 API Key"); return; }
+        async function performAssessment() {
+            const key = document.getElementById('apiKey').value;
+            if(!key) { alert("请先配置 API Key"); openSettings(); return; }
 
             document.getElementById('loadingOverlay').classList.add('visible');
-            
-            const data = collectData();
-            const prompt = createCsmPrompt(data);
+            document.getElementById('resultContainer').style.display = 'block';
+            const target = document.getElementById('analysisTarget');
+            target.innerHTML = "正在深度计算数据...";
+            target.classList.add('streaming');
+
+            const payload = {
+                basics: { age: document.getElementById('age').value, gender: document.getElementById('gender').value, h: document.getElementById('height').value, w: document.getElementById('weight').value },
+                complaint: { desc: document.getElementById('symptomDesc').value, dur: document.getElementById('duration').value, vas: document.getElementById('vas').value, numbness: document.getElementById('numbness').value },
+                functions: getActiveChecks('dysfunctionGrid'),
+                pmh: getActiveChecks('pmhGrid'),
+                pe: { checks: getActiveChecks('peGrid'), grip: document.getElementById('gripStrength').value, tenSec: document.getElementById('tenSecTest').value },
+                imaging: { curve: document.getElementById('curvature').value, pavlov: document.getElementById('pavlov').value, stable: document.getElementById('stability').value, calc: document.getElementById('calcification').value, t2: document.getElementById('t2Signal').value, segments: document.getElementById('segments').value, cr: document.getElementById('crRatio').value, emg: document.getElementById('emg').value },
+                scales: { joa: document.getElementById('joa').value, nurick: document.getElementById('nurick').value, drop: document.getElementById('mjoaDrop').value, proms: document.getElementById('proms').value },
+                plan: { type: document.getElementById('surgeryType').value, segs: document.getElementById('targetSegments').value, strategy: document.getElementById('strategy').value, suppl: document.getElementById('medicalHistory').value }
+            };
+
+            const prompt = `你是一位顶尖脊柱外科医生，现在龙华骨伤科进行CSM（脊髓型颈椎病）临床会诊。
+请根据以下数据，分五部分给出详细报告：
+1. 【现状分析】：概括功能受损严重程度。
+2. 【手术指证】：结合Nurick分级、Pavlov比值及MJOA下降值判断是否需立即手术。
+3. 【预后预测】：计算JOA预期改善率(Recovery Rate)，结合MRI T2信号与CR扁平率判断神经功能恢复上限。
+4. 【手术建议】：针对术式"${payload.plan.type}"分析节段稳定及减压充分性。
+5. 【海派康复建议】：结合中医“动静结合”给出指导。
+
+患者数据：${JSON.stringify(payload)}`;
 
             try {
                 const response = await fetch(document.getElementById('apiEndpoint').value, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
                     body: JSON.stringify({
                         model: document.getElementById('modelName').value,
-                        messages: [
-                            {role: "system", content: "你是一位资深的脊柱外科专家，特别擅长CSM的诊疗。请基于龙华骨伤科的学术背景（强调动静结合、筋骨并重），分析患者数据并提供手术时机选择及预后恢复预测。"},
-                            {role: "user", content: prompt}
-                        ],
-                        temperature: 0.2
+                        messages: [{role: "system", content: "你是一位脊柱外科专家。"}, {role: "user", content: prompt}],
+                        stream: true
                     })
                 });
 
-                const result = await response.json();
-                const content = result.choices[0].message.content;
-                
-                document.getElementById('loadingOverlay').classList.remove('visible');
-                document.getElementById('resultBox').style.display = 'block';
-                document.getElementById('analysisTarget').innerHTML = marked.parse(content);
-                document.getElementById('resultBox').scrollIntoView({behavior: 'smooth'});
+                if(!response.ok) throw new Error("API 连接失败");
 
-            } catch (e) {
-                alert("请求失败: " + e.message);
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullText = "";
+                target.innerHTML = "";
+
+                while(true) {
+                    const {done, value} = await reader.read();
+                    if(done) break;
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+                    for(const line of lines) {
+                        if(line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                const content = data.choices[0].delta.content || "";
+                                fullText += content;
+                                target.innerHTML = marked.parse(fullText);
+                            } catch(e) {}
+                        }
+                    }
+                }
+            } catch(e) {
+                target.innerHTML = `<span style="color:var(--accent)">错误：${e.message}</span>`;
+            } finally {
+                target.classList.remove('streaming');
                 document.getElementById('loadingOverlay').classList.remove('visible');
             }
-        }
-
-        function collectData() {
-            const getCheckValues = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(c => c.value);
-            return {
-                basics: {
-                    age: document.getElementById('age').value,
-                    gender: document.getElementById('gender').value,
-                    bmi: (document.getElementById('weight').value / Math.pow(document.getElementById('height').value/100, 2)).toFixed(1)
-                },
-                symptoms: {
-                    duration: document.getElementById('duration').value,
-                    vas: document.getElementById('vas').value,
-                    numbness: document.getElementById('numbness').value,
-                    dysfunctions: getCheckValues('df')
-                },
-                pe: {
-                    findings: getCheckValues('pe'),
-                    tenSec: document.getElementById('tenSecTest').value
-                },
-                imaging: {
-                    curvature: document.getElementById('curvature').value,
-                    pavlov: document.getElementById('pavlov').value,
-                    t2: document.getElementById('t2Signal').value,
-                    cr: document.getElementById('crRatio').value
-                },
-                scales: {
-                    joa: document.getElementById('joaScore').value,
-                    nurick: document.getElementById('nurick').value,
-                    surgery: document.getElementById('surgeryType').value
-                }
-            };
-        }
-
-        function createCsmPrompt(d) {
-            return `
-请针对以下CSM患者进行分析：
-[基本情况] 年龄:${d.basics.age}, 性别:${d.basics.gender}, BMI:${d.basics.bmi}。
-[症状] 病程:${d.symptoms.duration}, VAS:${d.symptoms.vas}, 麻木程度:${d.symptoms.numbness}。
-[功能障碍] ${d.symptoms.dysfunctions.join(', ')}。
-[查体] 阳性体征:${d.pe.findings.join(', ')}。10秒握伸试验:${d.pe.tenSec}次。
-[影像] 曲度:${d.imaging.curvature}, Pavlov比值:${d.imaging.pavlov}, MRI T2信号:${d.imaging.t2}, 扁平率:${d.imaging.cr}。
-[评分] 术前JOA:${d.scales.joa}, Nurick分级:${d.scales.nurick}。拟定术式:${d.scales.surgery}。
-
-任务要求：
-1. 评估手术时机必要性（结合短期MJOA下降趋势）。
-2. 计算JOA预期改善率（公式：(术后-术前)/(17-术前)×100%）并预测最终得分。
-3. 识别预后不良因子（如高龄、长病程、T2强信号等）。
-4. 针对拟定术式，提出并发症预防建议。
-5. 结合龙华骨伤特色，给出围手术期中西医结合康复指导。
-`;
         }
     </script>
 </body>
