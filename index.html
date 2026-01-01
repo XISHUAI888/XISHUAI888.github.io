@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSM手术时机及术后预后功能恢复预测系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --primary: #ff4b5c; /* 红色 */
+            --primary-light: #ff8c92;
+            --primary-dark: #c42b3f;
+            --accent: #2d3e50; /* 蓝色 */
+            --accent-light: #6a839b;
+            --bg-primary: #f8fafb;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1a2a3a;
+            --text-secondary: #5a6a7a;
+            --text-muted: #8a9aaa;
+            --border: #e0e8f0;
+            --shadow: rgba(26, 95, 122, 0.08);
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gradient-primary: linear-gradient(135deg, #ff4b5c 0%, #2d3e50 100%);
+            --gradient-accent: linear-gradient(135deg, #ff8c92 0%, #6a839b 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: white;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px var(--shadow);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .card-header {
+            background: var(--bg-secondary);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-header i {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Form Elements */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        input, select, textarea {
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(26, 95, 122, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 95, 122, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 95, 122, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Result Section */
+        .result-container {
+            display: none;
+        }
+
+        .result-container.visible {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-lungs"></i>
+                <div>
+                    <h1>CSM手术时机及术后预后功能恢复预测系统</h1>
+                    <span>龙华骨伤科</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Patient Information -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user"></i>
+                <h2>患者基本信息</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>年龄</label>
+                        <input type="number" id="age" placeholder="请输入年龄" min="0" max="150">
+                    </div>
+                    <div class="form-group">
+                        <label>性别</label>
+                        <select id="gender">
+                            <option value="">请选择</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>体重 (kg)</label>
+                        <input type="number" id="weight" placeholder="体重" min="0" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>身高 (cm)</label>
+                        <input type="number" id="height" placeholder="身高" min="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Symptoms -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-comment-medical"></i>
+                <h2>主诉症状</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>症状描述</label>
+                    <textarea id="chiefComplaint" placeholder="请详细描述症状"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>症状持续时间</label>
+                    <input type="text" id="symptomDuration" placeholder="如：1天，3天等">
+                </div>
+            </div>
+        </div>
+
+        <!-- Functionality and History -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-clipboard-list"></i>
+                <h2>功能障碍与病史</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>功能障碍</label>
+                    <textarea id="functionalDisabilities" placeholder="请列出功能障碍，如：写字、持筷不灵活等"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>既往史</label>
+                    <textarea id="medicalHistory" placeholder="请填写既往史，如：糖尿病、吸烟等"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="performAssessment()">
+                开始评估
+            </button>
+            <button class="btn btn-outline" onclick="resetForm()">
+                重置表单
+            </button>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="result-container" id="resultContainer">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <h2>详细分析报告</h2>
+                </div>
+                <div class="card-body">
+                    <p id="analysisContent">分析报告将在此显示...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>CSM手术时机及术后预后功能恢复预测系统 © 2025 | 龙华骨伤科</p>
+    </footer>
+
+    <script>
+        function performAssessment() {
+            const analysisContent = document.getElementById('analysisContent');
+            analysisContent.innerHTML = "正在进行评估...";
+            // Add assessment logic here
+        }
+
+        function resetForm() {
+            document.getElementById('age').value = '';
+            document.getElementById('gender').value = '';
+            document.getElementById('weight').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('chiefComplaint').value = '';
+            document.getElementById('symptomDuration').value = '';
+            document.getElementById('functionalDisabilities').value = '';
+            document.getElementById('medicalHistory').value = '';
+        }
+    </script>
+</body>
+</html>
